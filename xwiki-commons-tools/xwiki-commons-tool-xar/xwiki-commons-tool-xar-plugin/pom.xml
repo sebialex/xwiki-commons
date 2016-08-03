@@ -179,7 +179,8 @@
               **/UnXARMojo.java,
               **/XARMojo.java,
               **/VerifyMojo.java,
-              **/FormatMojo.java
+              **/FormatMojo.java,
+              **/GetMojo.java
           </excludes>
         </configuration>
         <executions>
