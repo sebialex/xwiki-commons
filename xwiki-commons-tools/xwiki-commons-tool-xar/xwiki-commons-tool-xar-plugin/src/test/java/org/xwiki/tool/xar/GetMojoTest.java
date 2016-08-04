@@ -22,8 +22,6 @@ package org.xwiki.tool.xar;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Base64;
 
 import org.junit.Test;
@@ -47,30 +45,8 @@ public class GetMojoTest
     }
 
     @Test
-    public void test1() throws IOException
-    {
-        GetMojo.XarPomFinder finder = new GetMojo.XarPomFinder();
-        GetMojo.XMLFinder xmlFinder = new GetMojo.XMLFinder();
-
+    public void test13() throws IOException {
         File file = new File("/home/sebastian/gene42/git/phenotips-niaid-fork");
-
-        Files.walkFileTree(file.toPath(), finder);
-
-        for (Path path : finder.getPoms()) {
-            System.out.println("path=" + path);
-
-            Path pomParent = path.getParent();
-            File srcDir = new File(pomParent.toFile(), "src");
-
-            if (srcDir.exists() && srcDir.isDirectory()) {
-                Files.walkFileTree(srcDir.toPath(), xmlFinder);
-            }
-        }
-
-        for (Path xmlPath : xmlFinder.getXmlFiles()) {
-            System.out.println("--- xml=" + xmlPath);
-        }
-
     }
 
 }
