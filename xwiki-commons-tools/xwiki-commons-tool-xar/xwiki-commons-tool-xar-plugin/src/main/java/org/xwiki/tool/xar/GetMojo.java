@@ -257,7 +257,7 @@ public class GetMojo extends AbstractXARMojo
     }
 
     /**
-     * File visitor for fining xml files.
+     * File visitor for finding xml files.
      */
     public static class XMLFinder extends SimpleFileVisitor<Path>
     {
