@@ -81,7 +81,7 @@ public class GetMojo extends AbstractXARMojo
      * Base url to use for exporting files
      */
     @Parameter(property = "url", readonly = true)
-    private URL url = new URL("http://localhost:8080/xwiki/bin/");
+    private URL url;
 
     /**
      * The User to use for authentication with the server.
@@ -113,6 +113,7 @@ public class GetMojo extends AbstractXARMojo
      */
     public GetMojo() throws MalformedURLException
     {
+        this.url = new URL("http://localhost:8080/xwiki/bin/");
     }
 
     @Override
@@ -157,7 +158,7 @@ public class GetMojo extends AbstractXARMojo
 
         File xarFile = this.getXarFile(xmlPath);
 
-        if (xarFile.length() <= 0) {
+        if (xarFile == null || xarFile.length() <= 0) {
             buffer.append("skipping (xar is empty)");
             return buffer;
         }
@@ -182,15 +183,21 @@ public class GetMojo extends AbstractXARMojo
 
             if (StringUtils.isNotBlank(this.user) && StringUtils.isNotBlank(this.pass)) {
                 byte[] credentials = String.format("%s:%s", this.user, this.pass).getBytes(StandardCharsets.UTF_8);
-                String basicAuth = "Basic " +  new String(Base64.getUrlEncoder().encode(credentials));
+                String basicAuth = "Basic " + new String(Base64.getEncoder().encode(credentials), StandardCharsets.UTF_8);
                 urlConnection.setRequestProperty("Authorization", basicAuth);
             }
 
             int responseCode = urlConnection.getResponseCode();
 
             if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException(String.format("Could not connect to [%s], code=[%s], message=[%s]",
-                    this.url, responseCode, urlConnection.getResponseMessage()));
+                if (responseCode == HttpURLConnection.HTTP_NOT_FOUND ||
+                    responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+                    return null;
+                }
+                else {
+                    throw new IOException(String.format("Could not connect to [%s], code=[%s], message=[%s]",
+                        this.url, responseCode, urlConnection.getResponseMessage()));
+                }
             }
 
             if (getLog().isDebugEnabled()) {
@@ -216,7 +223,7 @@ public class GetMojo extends AbstractXARMojo
         String completePageName = spacesName + "." + pageName;
 
         String urlSuffix = "/export/" + spacesURL + "/" + pageName + "?format=xar&name=" + completePageName +
-            "&pages=xwiki%3A" + completePageName;
+            "&pages=xwiki%3A" + completePageName + "&outputSyntax=plain";
         return new URL(this.url, urlSuffix);
     }
 
@@ -261,7 +268,6 @@ public class GetMojo extends AbstractXARMojo
      */
     public static class XMLFinder extends SimpleFileVisitor<Path>
     {
-
         private final PathMatcher matcher;
 
         private final List<Path> paths = new LinkedList<>();

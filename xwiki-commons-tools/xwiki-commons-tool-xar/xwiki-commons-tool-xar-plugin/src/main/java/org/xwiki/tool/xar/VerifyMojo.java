@@ -19,6 +19,8 @@
  */
 package org.xwiki.tool.xar;
 
+import org.xwiki.tool.xar.internal.XWikiDocument;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +33,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.xwiki.tool.xar.internal.XWikiDocument;
 
 /**
  * Perform various verifications of the XAR files in this project. Namely:
@@ -58,8 +59,6 @@ import org.xwiki.tool.xar.internal.XWikiDocument;
 )
 public class VerifyMojo extends AbstractVerifyMojo
 {
-    private static final String SYNTAX_PLAIN = "plain/1.0";
-
     /**
      * Disables the plugin execution.
      *

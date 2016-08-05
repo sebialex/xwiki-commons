@@ -186,9 +186,7 @@ public class XWikiDocument
         this.syntaxId = readElement(rootElement, "syntaxId");
 
         // Does this document contain a XWiki.TranslationDocumentClass xobject?
-        if (rootElement.selectNodes("//object/className[text() = 'XWiki.TranslationDocumentClass']").size() > 0) {
-            this.containsTranslations = true;
-        }
+        this.containsTranslations = containsTranslations(rootElement);
     }
 
     /**
@@ -384,6 +382,16 @@ public class XWikiDocument
     private String escapeSpaceOrPageName(String name)
     {
         return name != null ? name.replaceAll("[\\\\\\.]", "\\\\$0") : null;
+    }
+
+    /**
+     * Figures out if this Element contains a XWiki.TranslationDocumentClass xobject?
+     * @param element Element object to look into
+     * @return true if this Element contains a XWiki.TranslationDocumentClass xobject?, false otherwise
+     */
+    public static boolean containsTranslations(Element element)
+    {
+        return (element.selectNodes("//object/className[text() = 'XWiki.TranslationDocumentClass']").size() > 0);
     }
 
     /**

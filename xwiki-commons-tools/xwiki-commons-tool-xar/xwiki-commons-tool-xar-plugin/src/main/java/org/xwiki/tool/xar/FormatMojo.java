@@ -19,6 +19,8 @@
  */
 package org.xwiki.tool.xar;
 
+import org.xwiki.tool.xar.internal.XWikiDocument;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collection;
@@ -120,6 +122,13 @@ public class FormatMojo extends AbstractVerifyMojo
         node = domdoc.selectSingleNode("xwikidoc/minorEdit");
         if (node != null) {
             node.setText("false");
+        }
+
+        if (XWikiDocument.containsTranslations(domdoc.getRootElement())) {
+            node = domdoc.selectSingleNode("xwikidoc/syntaxId");
+            if (node != null) {
+                node.setText(SYNTAX_PLAIN);
+            }
         }
 
         // Also update the attachment authors

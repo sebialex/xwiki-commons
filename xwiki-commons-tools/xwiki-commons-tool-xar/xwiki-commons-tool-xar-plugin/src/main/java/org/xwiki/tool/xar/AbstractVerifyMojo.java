@@ -69,6 +69,12 @@ public abstract class AbstractVerifyMojo extends AbstractXARMojo
      */
     protected static final String VERSION = "1.1";
 
+    /**
+     * Plain syntax for use in XWiki.TranslationDocumentClass xobject
+     */
+    protected static final String SYNTAX_PLAIN = "plain/1.0";
+
+
     private static final String EXTENSION = ".xml";
 
     private static final Pattern TRANSLATION_PATTERN = Pattern.compile("(.*)\\..*\\.xml");
