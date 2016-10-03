@@ -60,7 +60,7 @@ public class FormatMojo extends AbstractVerifyMojo
     public void execute() throws MojoExecutionException, MojoFailureException
     {
         // Only format XAR modules or when forced
-        if (getProject().getPackaging().equals("xar") || this.force) {
+        if ("xar".equals(getProject().getPackaging()) || this.force) {
             getLog().info("Formatting XAR XML files...");
             initializePatterns();
             Collection<File> xmlFiles = getXARXMLFiles();
@@ -152,7 +152,7 @@ public class FormatMojo extends AbstractVerifyMojo
             removeContent(element);
         }
 
-        // If the page is technical, make sure it's hidedn
+        // If the page is technical, make sure it's hidden
         element = (Element) domdoc.selectSingleNode("xwikidoc/hidden");
         if (isTechnicalPage(fileName)) {
             element.setText("true");
